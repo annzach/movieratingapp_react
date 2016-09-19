@@ -11,6 +11,15 @@ const App = React.createClass({
       movies:[...movies,newMovie]
     })
   },
+  
+  sortScore(){
+     const {movies} = this.state;
+     console.log("inside Sort Score",movies);
+     sortedScore = movies.sort((a,b)=>
+       {
+        return (b.score-a.score);
+       })
+    },
 
   upScore(id){
   console.log("movie_id",id)
@@ -23,6 +32,7 @@ const App = React.createClass({
     }
   })
   this.setState({movies:movies});
+  this.sortScore();
   },
   
   downScore(id){
@@ -36,6 +46,7 @@ const App = React.createClass({
     }
   })
   this.setState({movies:movies});
+  this.sortScore();
   },
 
   render(){
@@ -45,7 +56,7 @@ const App = React.createClass({
       <div>
       <h1>Movie Rating App</h1>
       <MovieForm addNewMovie = {this.addMovie}/>
-      <MovieTable displayMovie = {movies} upScore={this.upScore} downScore={this.downScore}/>
+      <MovieTable displayMovie = {movies} upScore={this.upScore} downScore={this.downScore} />
       </div>
     )
   }
@@ -54,7 +65,6 @@ const App = React.createClass({
 //Movie Form Component
 
 const MovieForm = React.createClass({
-
   submitForm(event){
     event.preventDefault();
     let {name,url} = this.refs;
@@ -90,16 +100,6 @@ const MovieForm = React.createClass({
 // Movie Table Component
 
 const MovieTable = React.createClass({
-
-/*  sortScore(){
-     const {displayMovie} = this.props;
-     console.log("inside Sort Score",displayMovie);
-     keysSorted = Object.keys(displayMovie).sort(function(a,b){return displayMovie[a]-displayMovie[b]})
-      alert(keysSorted); 
-  },
-*/
-
-
   render(){
     const {displayMovie,upScore,downScore} = this.props;
     return (
