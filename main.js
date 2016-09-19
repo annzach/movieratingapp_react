@@ -1,7 +1,7 @@
 const App = React.createClass({
   getInitialState(){
     return {
-      movies:[]
+      movies:[],
     }
   },
 
@@ -12,6 +12,32 @@ const App = React.createClass({
     })
   },
 
+  upScore(id){
+  console.log("movie_id",id)
+  let{movies}=this.state;
+  console.log(movies);
+  movies.map(movie=> {
+    if(movie.id === id) {
+      console.log("id equal")
+      movie.score = movie.score+1;
+    }
+  })
+  this.setState({movies:movies});
+  },
+  
+  downScore(id){
+  console.log("movie_id",id)
+  let{movies}=this.state;
+  console.log(movies);
+  movies.map(movie=> {
+    if(movie.id === id && movie.score > 0) {
+      console.log("id equal")
+      movie.score = movie.score-1;
+    }
+  })
+  this.setState({movies:movies});
+  },
+
   render(){
     const {movies} =this.state;
     console.log("movies",movies)
@@ -19,7 +45,7 @@ const App = React.createClass({
       <div>
       <h1>Movie Rating App</h1>
       <MovieForm addNewMovie = {this.addMovie}/>
-      <MovieTable displayMovie = {movies}/>
+      <MovieTable displayMovie = {movies} upScore={this.upScore} downScore={this.downScore}/>
       </div>
     )
   }
@@ -65,36 +91,17 @@ const MovieForm = React.createClass({
 
 const MovieTable = React.createClass({
 
-  getInitialState(){
-    return {
-      score:0
-    }
-  },
-
-  sortScore(){
+/*  sortScore(){
      const {displayMovie} = this.props;
      console.log("inside Sort Score",displayMovie);
      keysSorted = Object.keys(displayMovie).sort(function(a,b){return displayMovie[a]-displayMovie[b]})
       alert(keysSorted); 
   },
+*/
 
-  upVote(id){
-    console.log(id);
-    let {score} = this.state;
-    this.setState({score:score+1});
-    this.sortScore();
-  },
-
-  downVote(id){
-     let {score} = this.state;
-     if(score>0){
-      this.setState({score:score-1});
-      this.sortScore();
-     }
-  },
 
   render(){
-    const {displayMovie} = this.props;
+    const {displayMovie,upScore,downScore} = this.props;
     return (
     <table className="table">
       <thead>
@@ -111,15 +118,15 @@ const MovieTable = React.createClass({
         <tr key={movie.id}>
           <td>{movie.name}</td>
           <td><img src={movie.url} width="150px"/></td>
-          <td>{this.state.score}</td>
-          <td><button onClick={()=>this.upVote(movie.id)}className="btn btn-sm btn-success glyphicon glyphicon-thumbs-up"></button>
-              <button onClick={()=>this.downVote(movie.id)}className="btn btn-sm btn-warning glyphicon glyphicon-thumbs-down"></button>
+          <td>{movie.score}</td>
+          <td><button onClick={upScore.bind(null,movie.id)}className="btn btn-sm btn-success glyphicon glyphicon-thumbs-up"></button>
+              <button onClick={downScore.bind(null,movie.id)}className="btn btn-sm btn-warning glyphicon glyphicon-thumbs-down"></button>
           </td>
         </tr>
       )
       })}
       
-</tbody> 
+    </tbody> 
     </table>
     )
   }
